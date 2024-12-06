@@ -12,51 +12,51 @@ document.addEventListener("DOMContentLoaded", function () {
     const restaurants = [
         {
             name: "Піца плюс",
-            image: "img/pizza-plus/preview.jpg",
             time: "50 хвилин",
             rating: 4.5,
             price: "від 200 ₴",
-            category: "Піца"
+            category: "Піца",
+            image: "img/pizza-plus/preview.jpg"
         },
         {
             name: "Танукі",
-			image: "img/tanuki/preview.jpg",
             time: "60 хвилин",
             rating: 4.5,
             price: "От 1 200 ₴",
-            category: "Суші, роли"
+            category: "Суші, роли",
+            image: "img/tanuki/preview.jpg"
         },
         {
             name: "FoodBand",
-			image: "img/food-band/preview.jpg",
             time: "40 хвилин",
             rating: 4.5,
             price: "От 150 ₴",
-            category: "Піца"
+            category: "Піца",
+            image: "img/food-band/preview.jpg"
         },
         {
             name: "Ikigai",
-			image: "img/palki-skalki/preview.jpg",
             time: "55 хвилин",
             rating: 4.5,
             price: "От 250 ₴",
-            category: "Піца"
+            category: "Піца",
+            image: "img/palki-skalki/preview.jpg"
         },
         {
             name: "Пузата хата",
-			image: "img/gusi-lebedi/preview.jpg",
             time: "75 хвилин",
             rating: 4.5,
             price: "От 300 ₴",
-            category: "Українські страви"
+            category: "Українські страви",
+            image: "img/gusi-lebedi/preview.jpg"
         },
         {
             name: "PizzaBurger",
-			image: "img/pizza-burger/preview.jpg",
             time: "45 хвилин",
             rating: 4.5,
             price: "От 700 ₴",
-            category: "Піца"
+            category: "Піца",
+            image: "img/pizza-burger/preview.jpg"
         }
     ];
 
@@ -83,20 +83,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     cardsContainer.addEventListener("click", function (event) {
-		const card = event.target.closest(".card-restaurant");
+        const card = event.target.closest(".card-restaurant");
 
-		if (!card) return;
-		
-		event.preventDefault();
+        if (!card) return;
 
-		if (!localStorage.getItem("login")) {
-			modalAuth.style.display = "flex";
-			document.body.style.overflow = "hidden";
-		} else {
-			window.location.href = "restaurant.html";
-		}
-	});
-
+        if (!localStorage.getItem("login")) {
+            modalAuth.style.display = "flex";
+            document.body.style.overflow = "hidden";
+        }
+    });
 
     authButton.addEventListener("click", () => {
         modalAuth.style.display = "flex";
@@ -125,14 +120,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const login = loginInput.value.trim();
         const password = passwordInput.value.trim();
 
-        if (login && password) {
+        if (!login || !password) {
+            if (!login) loginInput.style.borderColor = "red";
+            if (!password) passwordInput.style.borderColor = "red";
+            alert("Будь ласка, заповніть усі поля.");
+        } else {
             localStorage.setItem("login", login);
             displayLoggedIn(login);
             closeModal();
-        } else {
-            if (!login) loginInput.style.borderColor = "red";
-            if (!password) passwordInput.style.borderColor = "red";
-            alert("Будь ласка, введіть логін та пароль.");
         }
     });
 
@@ -140,6 +135,24 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.removeItem("login");
         displayLoggedOut();
     });
+
+    function displayLoggedIn(login) {
+        authButton.style.display = "none";
+        logoutButton.style.display = "inline-block";
+        userNameSpan.textContent = login;
+        userNameSpan.style.display = "inline";
+        loginInput.style.borderColor = "";
+        passwordInput.style.borderColor = "";
+    }
+
+    function displayLoggedOut() {
+        authButton.style.display = "inline-block";
+        logoutButton.style.display = "none";
+        userNameSpan.textContent = "";
+        userNameSpan.style.display = "none";
+        loginInput.value = "";
+        passwordInput.value = "";
+    }
 
     function closeModal() {
         modalAuth.style.display = "none";
@@ -152,23 +165,17 @@ document.addEventListener("DOMContentLoaded", function () {
         passwordInput.style.borderColor = "";
     }
 
-    function displayLoggedIn(login) {
-        authButton.style.display = "none";
-        logoutButton.style.display = "inline-block";
-        userNameSpan.textContent = login;
-        userNameSpan.style.display = "inline";
-        loginInput.value = "";
-        passwordInput.value = "";
-    }
-
-    function displayLoggedOut() {
-        authButton.style.display = "inline-block";
-        logoutButton.style.display = "none";
-        userNameSpan.textContent = "";
-        userNameSpan.style.display = "none";
-        loginInput.value = "";
-        passwordInput.value = "";
-    }
-
     generateRestaurantCards();
+	
+	const swiper = new Swiper('.swiper', {
+		loop: true,
+		pagination: {
+			el: '.swiper-pagination',
+			clickable: true,
+		},
+		navigation: {
+			nextEl: '.swiper-button-next',
+			prevEl: '.swiper-button-prev',
+		},
+	});
 });
